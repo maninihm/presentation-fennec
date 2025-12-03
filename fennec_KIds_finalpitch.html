@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fennec AI Kids - Pitch Deck V3</title>
+<style>
+/* --- IMPORTS FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* --- VARIABLES --- */
+:root {
+    --bg-color: #0a0e27;       /* Bleu Nuit */
+    --accent-color: #667eea;   /* Violet Tech */
+    --accent-light: #a3bffa;
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --success: #10b981;        /* Vert pour profits */
+    --danger: #ef4444;         /* Rouge pour dépenses */
+    --warning: #f59e0b;        /* Orange pour attention */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.08) 0%, transparent 20%);
+    color: var(--text-main);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* --- LOGO SVG (Nouveau) --- */
+.fennec-logo {
+    width: 180px;
+    height: 180px;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.3));
+    animation: float 6s ease-in-out infinite;
+}
+
+/* --- STRUCTURE --- */
+.slide {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    padding: 40px 80px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transform: scale(0.95) translateX(50px);
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide.active { opacity: 1; pointer-events: auto; transform: scale(1) translateX(0); }
+.slide.previous { transform: scale(0.95) translateX(-50px); opacity: 0; }
+
+/* --- TYPO --- */
+h1, h2, h3, .stat-number, .ask-amount { font-family: 'Fredoka', sans-serif; }
+
+h2 {
+    font-size: 42px; margin-bottom: 40px;
+    background: linear-gradient(90deg, #fff, var(--accent-color));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+/* --- UI ELEMENTS --- */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border); border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; max-width: 1100px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; width: 100%; max-width: 1100px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; max-width: 1200px; }
+
+/* --- ANIMATIONS --- */
+.step { opacity: 0; transform: translateY(20px); transition: all 0.5s ease-out; }
+.step.visible { opacity: 1; transform: translateY(0); }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+/* --- SPÉCIFIQUE TABLEAU 3 ANS --- */
+.finance-table {
+    width: 100%; max-width: 1000px; border-collapse: separate; border-spacing: 0 10px; margin-top: 20px;
+}
+.finance-table th { text-align: center; padding: 15px; color: var(--accent-light); font-weight: 600; font-size: 18px; }
+.finance-table td { padding: 20px; text-align: center; background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+.finance-table tr td:first-child { border-radius: 15px 0 0 15px; border-left: 1px solid rgba(255,255,255,0.05); text-align: left; padding-left: 30px; font-weight: bold; }
+.finance-table tr td:last-child { border-radius: 0 15px 15px 0; border-right: 1px solid rgba(255,255,255,0.05); }
+
+.bar-container { height: 8px; width: 100px; background: rgba(255,255,255,0.1); border-radius: 4px; display: inline-block; margin-right: 10px; vertical-align: middle; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; }
+
+/* --- SPÉCIFIQUE INVESTISSEMENT --- */
+.ask-amount { font-size: 110px; color: #fff; text-shadow: 0 0 40px rgba(102, 126, 234, 0.5); line-height: 1; }
+.use-funds-bar { display: flex; width: 100%; max-width: 900px; height: 35px; border-radius: 10px; overflow: hidden; margin: 30px 0; }
+.fund-segment { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+/* --- NAVIGATION --- */
+.slide-number { position: absolute; bottom: 30px; right: 40px; opacity: 0.5; font-size: 14px; }
+.nav-hint { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 12px; opacity: 0.3; }
+
+</style>
+</head>
+<body>
+
+<div class="presentation">
+
+    <div class="slide active" id="slide-1">
+        <svg class="fennec-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <path d="M40 60 L70 110 L80 60 Z" fill="url(#grad1)" />
+            <path d="M160 60 L130 110 L120 60 Z" fill="url(#grad1)" />
+            <path d="M50 100 L150 100 L100 170 Z" fill="url(#grad1)" opacity="0.9"/>
+            <path d="M70 100 L130 100 L100 150 Z" fill="#fff" opacity="0.15"/>
+            <rect x="80" y="115" width="10" height="10" rx="2" fill="#fff" />
+            <rect x="110" y="115" width="10" height="10" rx="2" fill="#fff" />
+        </svg>
+        
+        <h1 style="font-size: 72px; margin-bottom: 10px;">FENNEC AI KIDS</h1>
+        <div style="font-size: 24px; color: var(--accent-color); margin-top: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">
+            L'IA qui grandit avec eux
+        </div>
+        <p style="margin-top: 30px; font-size: 18px; color: var(--text-muted);">Apprendre • Créer • Explorer</p>
+        <div class="slide-number">1 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-2">
+        <h2>🎯 LE PROBLÈME</h2>
+        <div class="grid-2">
+            <div class="glass-panel step">
+                <div style="font-size: 36px; margin-bottom: 15px;">🚫</div>
+                <h3 style="margin-bottom: 10px; color: var(--accent-color);">Vide Technologique</h3>
+                <p>Aucune IA adaptée aux spécificités culturelles et linguistiques (Darija/Arabe) de l'enfant algérien.</p>
+            </div>
+            <div class="glass-panel step">
+                <div style="font-size: 36px; margin-bottom: 15px;">📱</div>
+                <h3 style="margin-bottom: 10px; color: var(--accent-color);">Solutions Inadaptées</h3>
+                <p>ChatGPT est trop complexe et non sécurisé. Le contenu occidental ne résonne pas avec nos valeurs.</p>
+            </div>
+            <div class="glass-panel step">
+                <div style="font-size: 36px; margin-bottom: 15px;">🧠</div>
+                <h3 style="margin-bottom: 10px; color: var(--accent-color);">Besoin de Tuteur</h3>
+                <p>Les parents cherchent désespérément un soutien scolaire personnalisé, patient et abordable.</p>
+            </div>
+            <div class="glass-panel step">
+                <div style="font-size: 36px; margin-bottom: 15px;">🇩🇿</div>
+                <h3 style="margin-bottom: 10px; color: var(--accent-color);">Souveraineté</h3>
+                <p>Nécessité urgente d'une solution locale pour préserver l'identité numérique des générations futures.</p>
+            </div>
+        </div>
+        <div class="slide-number">2 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-3">
+        <h2>⚡ POURQUOI MAINTENANT ?</h2>
+        <div class="grid-3">
+            <div class="glass-panel step" style="text-align: center;">
+                <h3 style="font-size: 50px; color: var(--accent-color); margin-bottom: 15px;">73%</h3>
+                <p style="font-weight: 600;">Pénétration Internet</p>
+                <p style="font-size: 13px; margin-top: 10px; color: var(--text-muted);">L'infrastructure est prête pour l'EdTech de masse.</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <h3 style="font-size: 50px; color: var(--success); margin-bottom: 15px;">AI 💥</h3>
+                <p style="font-weight: 600;">Maturité Technologique</p>
+                <p style="font-size: 13px; margin-top: 10px; color: var(--text-muted);">Les LLMs sont enfin assez performants pour enseigner.</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <h3 style="font-size: 50px; color: var(--warning); margin-bottom: 15px;">🏛️</h3>
+                <p style="font-weight: 600;">Volonté Politique</p>
+                <p style="font-size: 13px; margin-top: 10px; color: var(--text-muted);">Forte poussée vers la digitalisation et les startups.</p>
+            </div>
+        </div>
+        <div class="slide-number">3 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-4">
+        <h2>✨ LA SOLUTION : FENNEC AI</h2>
+        <div class="grid-2">
+            <div class="glass-panel step" style="border-left: 4px solid var(--accent-color);">
+                <h3>🎓 Tuteur Intelligent</h3>
+                <p style="margin-top: 10px;">Aide aux devoirs, maths et langues avec une patience infinie.</p>
+            </div>
+            <div class="glass-panel step" style="border-left: 4px solid var(--accent-color);">
+                <h3>🛡️ Safe & Secure</h3>
+                <p style="margin-top: 10px;">Filtrage strict, zéro donnée sensible, environnement clos.</p>
+            </div>
+            <div class="glass-panel step" style="border-left: 4px solid var(--accent-color);">
+                <h3>🗣️ Parle Darija</h3>
+                <p style="margin-top: 10px;">Interface vocale qui comprend enfin nos enfants naturellement.</p>
+            </div>
+            <div class="glass-panel step" style="border-left: 4px solid var(--accent-color);">
+                <h3>🎨 Mode Créatif</h3>
+                <p style="margin-top: 10px;">Génération d'histoires locales, dessins et jeux éducatifs.</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-5">
+        <h2>📊 UN MARCHÉ MASSIF</h2>
+        <div class="grid-3" style="margin-top: 40px;">
+            <div class="glass-panel step" style="text-align: center;">
+                <div class="stat-number" data-target="14">0</div>
+                <div style="font-size: 24px; font-weight: bold;">Millions</div>
+                <p style="color: var(--text-muted);">Enfants (6-16 ans)</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <div class="stat-number" data-target="2">0</div>
+                <div style="font-size: 24px; font-weight: bold;">Millions</div>
+                <p style="color: var(--text-muted);">Élèves scolarisés (Cible 1)</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <div class="stat-number" data-target="150">0</div>
+                <div style="font-size: 24px; font-weight: bold;">Mds DA</div>
+                <p style="color: var(--text-muted);">Marché du soutien scolaire</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-6">
+        <h2>🚀 FONCTIONNALITÉS</h2>
+        <div class="grid-4">
+            <div class="glass-panel step" style="text-align: center;">
+                <div style="font-size: 40px; margin-bottom: 15px;">🇬🇧</div>
+                <h3>Langues</h3>
+                <p style="font-size: 13px;">Conversation interactive</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <div style="font-size: 40px; margin-bottom: 15px;">📐</div>
+                <h3>Sciences</h3>
+                <p style="font-size: 13px;">Aide aux problèmes</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <div style="font-size: 40px; margin-bottom: 15px;">🎮</div>
+                <h3>Jeux</h3>
+                <p style="font-size: 13px;">Apprendre en jouant</p>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <div style="font-size: 40px; margin-bottom: 15px;">📚</div>
+                <h3>Contes</h3>
+                <p style="font-size: 13px;">Histoires du patrimoine</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-7">
+        <h2>💰 MODÈLE DE REVENUS</h2>
+        <div style="display: flex; gap: 50px; align-items: center; margin-top: 20px;">
+            <div class="step" style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 20px; height: 20px; background: var(--accent-color); border-radius: 5px;"></div>
+                    <div>
+                        <strong style="font-size: 20px;">60% B2C Freemium</strong>
+                        <div style="font-size: 14px; opacity: 0.7;">Abonnement 500 DA/mois</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 20px; height: 20px; background: #10b981; border-radius: 5px;"></div>
+                    <div>
+                        <strong style="font-size: 20px;">30% Écoles (B2B)</strong>
+                        <div style="font-size: 14px; opacity: 0.7;">Licences annuelles par classe</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 20px; height: 20px; background: #f59e0b; border-radius: 5px;"></div>
+                    <div>
+                        <strong style="font-size: 20px;">10% Gouvernement</strong>
+                        <div style="font-size: 14px; opacity: 0.7;">Partenariats Publics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" style="width: 300px; height: 300px; border-radius: 50%; background: conic-gradient(var(--accent-color) 0% 60%, #10b981 60% 90%, #f59e0b 90% 100%); display: flex; align-items: center; justify-content: center;">
+                <div style="width: 200px; height: 200px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    <div style="font-size: 30px; font-weight: bold; font-family: 'Fredoka';">Sources</div>
+                    <div style="font-size: 14px; opacity: 0.7;">de Revenus</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-8">
+        <h2>📉 DÉTAIL DES COÛTS (Année 1)</h2>
+        <p style="margin-bottom: 30px; opacity: 0.8;">Répartition précise du besoin de financement pour les 12 premiers mois.</p>
+        
+        <div class="grid-2">
+            <div class="glass-panel step">
+                <h3 style="color: var(--accent-color); font-size: 22px;">💻 Tech & R&D</h3>
+                <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">6.3M <span style="font-size: 16px; opacity: 0.6;">DA/an</span></div>
+                <ul style="font-size: 14px; line-height: 1.6; opacity: 0.8; margin-left: 20px;">
+                    <li>1 ML Engineer (Expert IA)</li>
+                    <li>2 Développeurs Backend Senior</li>
+                    <li>1 Dév Mobile</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel step">
+                <h3 style="color: #764ba2; font-size: 22px;">📢 Marketing</h3>
+                <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">4.1M <span style="font-size: 16px; opacity: 0.6;">DA/an</span></div>
+                <ul style="font-size: 14px; line-height: 1.6; opacity: 0.8; margin-left: 20px;">
+                    <li>Campagnes Digitales (Ads)</li>
+                    <li>Partenariats Influenceurs</li>
+                    <li>Événements Écoles</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel step">
+                <h3 style="color: #f59e0b; font-size: 22px;">☁️ Infrastructure</h3>
+                <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">2.5M <span style="font-size: 16px; opacity: 0.6;">DA/an</span></div>
+                <ul style="font-size: 14px; line-height: 1.6; opacity: 0.8; margin-left: 20px;">
+                    <li>Serveurs GPU (Training)</li>
+                    <li>Hébergement Cloud</li>
+                    <li>Sécurité</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel step">
+                <h3 style="color: #10b981; font-size: 22px;">⚖️ Ops & Admin</h3>
+                <div style="font-size: 32px; font-weight: bold; margin: 10px 0;">2.1M <span style="font-size: 16px; opacity: 0.6;">DA/an</span></div>
+                <ul style="font-size: 14px; line-height: 1.6; opacity: 0.8; margin-left: 20px;">
+                    <li>Juridique & Création</li>
+                    <li>Bureaux</li>
+                    <li>Licences logicielles</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-number">8 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-9">
+        <h2>📈 PROJECTION FINANCIÈRE 3 ANS</h2>
+        <p style="opacity: 0.8; margin-bottom: 20px;">L'investissement Year 1 est le catalyseur de la rentabilité Year 2.</p>
+        
+        <table class="finance-table">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding-left: 30px;">INDICATEURS CLÉS</th>
+                    <th>ANNÉE 1<br><span style="font-size:12px; opacity:0.6; font-weight:400;">(Lancement)</span></th>
+                    <th>ANNÉE 2<br><span style="font-size:12px; opacity:0.6; font-weight:400;">(Croissance)</span></th>
+                    <th>ANNÉE 3<br><span style="font-size:12px; opacity:0.6; font-weight:400;">(Scale)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="step">
+                    <td>👥 Utilisateurs Actifs</td>
+                    <td>50,000</td>
+                    <td>150,000</td>
+                    <td><strong>350,000+</strong></td>
+                </tr>
+                <tr class="step">
+                    <td>🔴 Coûts (Dépenses)</td>
+                    <td>12.5 M DA</td>
+                    <td>10.8 M DA</td>
+                    <td>12.2 M DA</td>
+                </tr>
+                <tr class="step">
+                    <td>🟢 Revenus (CA)</td>
+                    <td>3.2 M DA</td>
+                    <td>12.8 M DA</td>
+                    <td><strong>28.5 M DA</strong></td>
+                </tr>
+                <tr class="step" style="font-weight: bold;">
+                    <td>💰 RÉSULTAT NET</td>
+                    <td style="color: var(--warning);">-9.3 M DA</td>
+                    <td style="color: var(--success);">+2.0 M DA</td>
+                    <td style="color: var(--success); font-size: 20px;">+16.3 M DA</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="glass-panel step" style="margin-top: 30px; text-align: center; border-left: 5px solid var(--success); max-width: 800px;">
+            🚀 <strong>Rentabilité :</strong> Le point d'équilibre (Break-even) est atteint au <strong>20ème mois</strong>.<br>
+            La perte de la première année est entièrement couverte par la levée de fonds.
+        </div>
+        <div class="slide-number">9 / 10</div>
+    </div>
+
+    <div class="slide" id="slide-10">
+        <h2 style="margin-bottom: 20px;">🎯 OPPORTUNITÉ D'INVESTISSEMENT</h2>
+        
+        <div class="step" style="text-align: center; margin-bottom: 30px;">
+            <p style="font-size: 20px; opacity: 0.8;">Financement Seed pour couvrir 18 mois d'opérations</p>
+            <div class="ask-amount">15M <span style="font-size: 50px;">DA</span></div>
+            <div style="font-size: 24px; font-weight: 300; margin-top: 10px; color: var(--accent-light);">Contre 20% Equity</div>
+        </div>
+
+        <div class="use-funds-bar step">
+            <div class="fund-segment" style="width: 50%; background: #667eea;">50% Tech</div>
+            <div class="fund-segment" style="width: 25%; background: #764ba2;">25% Infra</div>
+            <div class="fund-segment" style="width: 18%; background: #f59e0b;">18% Mkt</div>
+            <div class="fund-segment" style="width: 7%; background: #10b981;">7% Admin</div>
+        </div>
+
+        <div class="grid-2" style="max-width: 900px; margin-top: 20px;">
+            <div class="glass-panel step" style="text-align: center;">
+                <div style="font-size: 30px; margin-bottom: 10px;">📈</div>
+                <strong>Valorisation Y3</strong>
+                <div style="font-size: 24px; color: var(--success); font-weight: bold;">150M DA</div>
+            </div>
+            <div class="glass-panel step" style="text-align: center;">
+                <div style="font-size: 30px; margin-bottom: 10px;">🚀</div>
+                <strong>ROI Investisseur</strong>
+                <div style="font-size: 24px; color: var(--success); font-weight: bold;">x5 à x7</div>
+            </div>
+        </div>
+
+        <div class="slide-number">10 / 10</div>
+    </div>
+
+    <div class="nav-hint">Flèches ⬅️ ➡️ pour naviguer • F11 Plein écran</div>
+
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    // Animation des chiffres
+    function animateNumbers(slideElement) {
+        const numbers = slideElement.querySelectorAll('.stat-number');
+        numbers.forEach(num => {
+            const target = +num.getAttribute('data-target');
+            const duration = 2000;
+            const start = 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3); 
+                
+                if(target > 100) {
+                     num.textContent = Math.floor(start + (target - start) * ease);
+                } else {
+                     num.textContent = (start + (target - start) * ease).toFixed(target % 1 === 0 ? 0 : 1);
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    num.textContent = target;
+                }
+            }
+            requestAnimationFrame(update);
+        });
+    }
+
+    // Gestion des slides
+    function showSlide(index, direction) {
+        slides.forEach(s => {
+            s.classList.remove('active', 'previous');
+        });
+
+        const activeSlide = slides[index];
+        activeSlide.classList.add('active');
+        
+        if (direction === 'next' && index > 0) {
+            slides[index - 1].classList.add('previous');
+        }
+
+        // Reset des animations steps
+        const steps = activeSlide.querySelectorAll('.step');
+        steps.forEach(step => step.classList.remove('visible'));
+
+        // Lancer les compteurs si slide marché
+        if(activeSlide.id === 'slide-5') {
+            animateNumbers(activeSlide);
+        }
+    }
+
+    // Étape suivante (Step by Step Reveal)
+    function nextStep() {
+        const activeSlide = slides[currentSlide];
+        const hiddenSteps = activeSlide.querySelectorAll('.step:not(.visible)');
+
+        if (hiddenSteps.length > 0) {
+            hiddenSteps[0].classList.add('visible');
+        } else {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide, 'next');
+            }
+        }
+    }
+
+    // Étape précédente
+    function prevStep() {
+        const activeSlide = slides[currentSlide];
+        const visibleSteps = activeSlide.querySelectorAll('.step.visible');
+
+        if (visibleSteps.length > 0) {
+            visibleSteps[visibleSteps.length - 1].classList.remove('visible');
+        } else {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide, 'prev');
+                const prevSlideSteps = slides[currentSlide].querySelectorAll('.step');
+                prevSlideSteps.forEach(s => s.classList.add('visible'));
+            }
+        }
+    }
+
+    // Contrôles Clavier
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            nextStep();
+        } else if (e.key === 'ArrowLeft') {
+            prevStep();
+        }
+    });
+
+    // Start
+    showSlide(0);
+</script>
+
+</body>
+</html>
